@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Information</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 50px;
+        }
+        .info-container {
+            max-width: 600px;
+            margin: auto;
+            border: 1px solid #ccc;
+            padding: 20px;
+            border-radius: 10px;
+            background-color: #f9f9f9;
+        }
+        .info-row {
+            display: flex;
+            margin-bottom: 15px;
+        }
+        .info-label {
+            font-weight: bold;
+            width: 150px;
+        }
+        .info-value {
+            flex: 1;
+        }
+        .report-button {
+            display: block;
+            margin: 20px auto;
+            padding: 10px 20px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            text-align: center;
+        }
+        .report-button:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+    <div class="info-container">
+        <h2>Student Information</h2>
+        <div id="studentInfo">
+            <!-- Student information will be loaded here -->
+        </div>
+        <button class="report-button" onclick="reportIssue()">Edit</button>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            fetch('5.php')
+                .then(response => response.json())
+                .then(data => {
+                    const container = document.getElementById('studentInfo');
+                    if (data.length > 0) {
+                        data.forEach(student => {
+                            const fields = [
+                                { label: 'Full Name', value: student.fullname },
+                                { label: 'Roll Number', value: student.roll },
+                                { label: 'Age', value: student.age },
+                                { label: 'Mobile Number', value: student.pnumber },
+                                { label: 'Email', value: student.email }
+                            ];
+                            fields.forEach(field => {
+                                const row = document.createElement('div');
+                                row.className = 'info-row';
+                                row.innerHTML = `
+                                    <div class="info-label">${field.label}:</div>
+                                    <div class="info-value">${field.value}</div>
+                                `;
+                                container.appendChild(row);
+                            });
+                        });
+                    } else {
+                        container.innerHTML = '<p>No data found</p>';
+                    }
+                })
+                .catch(error => {
+                    console.error('Error fetching data:', error);
+                });
+        });
+
+        function reportIssue() {
+            window.location.href = '2.html'; // Redirect to the report page
+        }
+    </script>
+</body>
+</html>
+
